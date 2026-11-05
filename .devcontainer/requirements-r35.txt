@@ -1,0 +1,25 @@
+# Dipendenze Python dei nodi di demo_launch su JetPack 5.1.1 (Python 3.8).
+# torch, torchvision, torchaudio e OpenCV arrivano dall'immagine base.
+# onnxruntime arriva dalla build CUDA/TensorRT di dustynv/onnxruntime:r35.3.1.
+numpy==1.24.4
+scipy==1.10.1
+protobuf==3.20.3
+pillow==10.4.0
+pyyaml==6.0.3
+onnx==1.16.2
+onnxconverter-common==1.16.0
+onnx2torch==1.5.15
+filterpy==2.0.0
+lap==0.5.14
+imutils==0.5.4
+# Serve solo all'import di image_input_node, avviato da demo_launch
+pyrealsense2
+transformers==4.46.3
+optimum==1.23.3
+evaluate==0.4.3
+# Dipendenze di mediapipe, che viene installato con --no-deps
+absl-py==2.3.1
+attrs==25.3.0
+flatbuffers==25.12.19
+matplotlib==3.7.5
+sounddevice==0.5.6

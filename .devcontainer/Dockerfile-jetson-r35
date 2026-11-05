@@ -1,0 +1,63 @@
+# Image for ARI's internal Jetson: JetPack 5.1.1, L4T r35.3.1, Python 3.8.
+# Runs demo_launch.launch.py. Camera and audio arrive as ROS topics.
+#
+# Must be built on an arm64 machine with internet access:
+#   docker build -f Dockerfile-jetson-r35 -t pepper_demo:r35 .
+# For the r36 (JetPack 6) version see Dockerfile-jetson.
+
+FROM dustynv/onnxruntime:r35.3.1 AS ort
+
+FROM dustynv/ros:humble-pytorch-l4t-r35.3.1
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV TZ=Europe/Rome
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN mv /etc/apt/sources.list.d/ros2.list /etc/apt/sources.list.d/ros2.list.disabled \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends libportaudio2 \
+    && rm -rf /var/lib/apt/lists/*
+
+# The base image's torch version (2.0.0.nv23.05) is not PEP 440: pip ranks it below
+# any requirement and would replace it with the PyPI torch, which has no CUDA.
+RUN cd /usr/local/lib/python3.8/dist-packages \
+    && sed -i 's/2\.0\.0\.nv23\.05/2.0.0+nv23.05/g' \
+        torch-2.0.0.nv23.05.dist-info/METADATA torch-2.0.0.nv23.05.dist-info/RECORD \
+    && mv torch-2.0.0.nv23.05.dist-info torch-2.0.0+nv23.05.dist-info
+
+# pip >= 24.1 rejects non-PEP 440 versions
+RUN python3 -m pip install "pip<24.1"
+
+# Versions are listed in requirements-r35.txt
+WORKDIR /tmp/deps
+COPY requirements-r35.txt .
+COPY --from=ort /opt/onnxruntime_gpu-*.whl .
+# The base image's PyYAML was installed with distutils, so pip cannot remove it
+RUN python3 -m pip install --no-cache-dir --ignore-installed pyyaml==6.0.3 \
+    && python3 -m pip install --no-cache-dir -r requirements-r35.txt \
+    && python3 -m pip install --no-cache-dir ./onnxruntime_gpu-*.whl
+
+# Without --no-deps these would install opencv-python, which conflicts with the
+# base image's CUDA OpenCV used by cv_bridge. silero-vad would also pull
+# onnxruntime from PyPI, which has no CUDA.
+RUN python3 -m pip install --no-cache-dir --no-deps \
+    mediapipe==0.10.9 \
+    deep_sort_realtime==1.3.2 \
+    silero-vad==6.2.3
+
+# Must stay after the other installs: needed by colcon --symlink-install
+RUN python3 -m pip install --no-cache-dir setuptools==58.2.0
+
+# Fail the build if pip replaced the base image's CUDA torch
+RUN python3 -c "from importlib.metadata import version as v; assert v('torch') == '2.0.0+nv23.05', v('torch')"
+
+WORKDIR /root
+RUN rm -rf /tmp/deps
+COPY entrypoint-r35.bash .
+RUN chmod +x entrypoint-r35.bash
+
+ENV PYTHONPATH="/workspace"
+ENV WORKSPACE="/workspace"
+ENV ROS_DOMAIN_ID=1
+
+ENTRYPOINT [ "/root/entrypoint-r35.bash" ]
