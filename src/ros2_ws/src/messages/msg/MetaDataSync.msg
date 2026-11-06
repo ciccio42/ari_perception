@@ -1,0 +1,1 @@
+uint32 max_temporal_size

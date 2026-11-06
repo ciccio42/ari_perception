@@ -1,0 +1,7 @@
+std_msgs/Header header
+sensor_msgs/CompressedImage frame
+messages/AsdData is_speaking_data
+messages/GazeData is_looking_data
+messages/FaceDetectorFrameData face_info
+messages/SoftBioFrame biometrics
+messages/ObjectFrameStamped objects

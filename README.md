@@ -13,23 +13,32 @@ Start a shell in the container from the repository root:
 ```bash
 docker run -it \
         --rm \
-        --runtime nvidia \
-        --network host \
-        -v "$(pwd)":/workspace \
+        --name='ari_perception' \
+        --runtime=nvidia \
+        --gpus=all \
+        --net=host \
+        --ipc=host \
+        -e RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
+        -e DEMO_LANGUAGE='Italian' \
+        -v "$(pwd)/src":/workspace \
         pepper_demo:r35 \
         bash
 ```
 
 `--runtime nvidia` is required: without it, `cv2` and `cv_bridge` crash on import and CUDA is not available.
 
-ROS 2 is not sourced by default, so run this inside the container:
-
-```bash
-source /opt/ros/humble/install/setup.bash
-```
+The entrypoint sources ROS 2, then runs the given command.
 
 # Run Demo
 
+```bash
+cd /workspace/ros2_ws
+rm -rf build install log
+colcon build --symlink-install
+source install/setup.bash
+ros2 daemon stop
+ros2 launch demo_launch demo_launch.launch.py
+```
 
 # Useful commands
 ```bash

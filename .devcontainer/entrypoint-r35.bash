@@ -15,3 +15,5 @@ source /opt/ros/humble/install/setup.bash
 # echo "Starting ROS2 demo launch file..."
 # cd /workspace
 # exec ros2 launch demo_launch demo_launch.launch.py
+
+exec "$@"

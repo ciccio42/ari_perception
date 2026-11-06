@@ -1,0 +1,39 @@
+-
+  ros1_package_name: 'data_gathering'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'data_gathering'
+  ros1_service_name: 'MetaCameraSrv'
+  ros2_package_name: 'messages'
+  ros2_service_name: 'MetaCameraSrv'
+-
+  ros1_package_name: 'asd'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'asr'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'asr'
+  ros1_service_name: 'Asr'
+  ros2_package_name: 'messages'
+  ros2_service_name: 'Asr'
+-
+  ros1_package_name: 'gaze'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'soft_biometrics'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'object_detector'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'game_rock_paper_scissor'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'game_connect_four'
+  ros2_package_name: 'messages'
+-
+  ros1_package_name: 'game_rock_paper_scissor'
+  ros1_service_name: 'Move'
+  ros2_package_name: 'messages'
+  ros2_service_name: 'Move'

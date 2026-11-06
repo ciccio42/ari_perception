@@ -1,0 +1,38 @@
+asd_node:
+  ros__parameters:
+    ratio: 0.1
+    model_threshold: 0.76
+    record_seconds: 1.0
+    frequency: 10
+
+face_detection_node:
+  ros__parameters:
+    max_num_faces: 3 #-1 to disable option
+    bb_area_th: 6300
+    frequency: 10
+
+soft_biometrics_node:
+  ros__parameters:
+    frequency: 10
+
+obj_detector_node: 
+  ros__parameters:
+    frequency: 10
+    confidence_threshold: 0.7
+
+gaze_estimation_node:
+  ros__parameters:
+    yaw_threshold: 26
+    frequency: 10
+
+image_hand_fingers_node:
+  ros__parameters:
+    frequency: 10
+
+image_hand_node:
+  ros__parameters:
+    frequency: 10
+
+asr_node:
+  ros__parameters:
+    silero_vad_threshold: 0.5

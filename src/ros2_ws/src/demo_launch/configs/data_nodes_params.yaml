@@ -1,0 +1,29 @@
+audio_conversion_node:
+  ros__parameters:
+    slop: 30
+
+respeaker_node:
+  ros__parameters:
+    speech_prefetch: 3.0
+    speech_continuation: 2.0
+    max_duration: 22
+    min_duration: 0.1
+    GAMMAVAD_SR: 20.0
+
+model_data_sync_node:
+  ros__parameters:
+    slop: 0.2
+
+image_input_node:
+  ros__parameters:
+    fps: 15
+    width: 640
+    height: 480
+    exposure: 90
+
+view_node:
+  ros__parameters:
+    show_bio: true
+    show_asd: false
+    show_obj: true
+

@@ -1,0 +1,5 @@
+float32 fps
+int32 width
+int32 height
+uint32 hfov
+uint32 vfov
